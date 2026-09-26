@@ -13,6 +13,7 @@
     --cream: #F4EFD6; --cream-deep: #ECE3BE; --ocean: #2B6DA3; --ocean-deep: #1C4A72; --gold: #F0921B; --rust: #8A4A24; --ink: #26221B;
   }
   * { box-sizing: border-box; }
+  input, select, textarea { width: 100%; max-width: 100%; }
   html { scroll-behavior: smooth; }
   body { margin: 0; background: var(--cream); font-family: 'Zen Kaku Gothic New', sans-serif; color: var(--ink); }
   h1, h2, h3 { font-family: 'Shippori Mincho B1', serif; margin: 0; }
@@ -114,7 +115,7 @@
         <div class="form-grid" style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px;">
           <div style="display:flex; flex-direction:column; gap:6px;">
             <label for="res-date" style="font-size:13px; font-weight:700; color:var(--ocean-deep);">ご希望日</label>
-            <input id="res-date" type="date" style="padding:11px 14px; border-radius:8px; border:1px solid rgba(38,34,27,0.22); font-size:14.5px; font-family:'Zen Kaku Gothic New', sans-serif;">
+            <input id="res-date" type="date" style="padding:11px 14px; border-radius:8px; border:1px solid rgba(38,34,27,0.22); font-size:14.5px; font-family:'Zen Kaku Gothic New', sans-serif; background:#fff; color:var(--ink); -webkit-appearance:none;">
           </div>
           <div style="display:flex; flex-direction:column; gap:6px;">
             <label for="res-purpose" style="font-size:13px; font-weight:700; color:var(--ocean-deep);">ご利用目的</label>
