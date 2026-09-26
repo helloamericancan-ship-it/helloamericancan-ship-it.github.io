@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>techrenew — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    --bg: #14171B; --surface: #1B1F24; --surface-2: #22262C; --border: #33383F;
+    --text: #ECEDEE; --text-muted: #9AA0A8;
+    --accent: #E2A33D; --accent-ink: #14171B;
+    --good: #6FB484; --good-bg: #1E2A22;
+    --warn: #E28A52; --warn-bg: #2E2119;
+    --bad: #D97A6E; --bad-bg: #2E1E1C;
+    --brand-orange: #DD7E2C; --brand-green: #7CB342;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: "Inter", sans-serif; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: "Barlow Condensed", sans-serif; font-weight: 600; margin: 0; }
+  .mono { font-family: "IBM Plex Mono", monospace; }
+  button, input, select, textarea { font-family: inherit; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 18px 60px; }
+
+  header.top { position: sticky; top: env(safe-area-inset-top,0px); background: var(--surface); border-bottom: 1px solid var(--border); z-index: 20; }
+  .top-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; max-width: 880px; margin: 0 auto; }
+  .brand { font-size: 26px; font-weight: 700; }
+  .b-tech { color: var(--brand-orange); } .b-renew { color: var(--brand-green); }
+  .brand-sub { font-size: 11px; color: var(--text-muted); }
+
+  .btn { border: 1px solid var(--border); background: var(--surface); color: var(--text); padding: 8px 13px; font-size: 13.5px; font-weight: 500; border-radius: 4px; cursor: pointer; }
+  .btn-accent { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  .btn-danger { color: var(--bad); border-color: var(--bad); background: transparent; }
+  .btn-sm { padding: 5px 10px; font-size: 12.5px; }
+
+  .tabs2 { display: flex; gap: 6px; margin: 16px 0; flex-wrap: wrap; }
+  .tab2 { border: 1px solid var(--border); background: var(--surface-2); color: var(--text-muted); padding: 7px 13px; font-size: 13px; border-radius: 999px; cursor: pointer; }
+  .tab2.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card2 { border: 1px solid var(--border); background: var(--surface); border-radius: 6px; padding: 16px; margin-bottom: 14px; }
+  .lot-row { display: flex; gap: 12px; align-items: flex-start; border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 10px; background: var(--surface); }
+  .thumb { width: 56px; height: 56px; border-radius: 4px; object-fit: cover; border: 1px solid var(--border); flex: none; background: var(--surface-2); }
+  .photo-strip { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .photo-thumb-wrap { position: relative; width: 44px; height: 44px; flex: none; }
+  .photo-thumb-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); display: block; }
+  .photo-remove {
+    position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--bad); color: #fff; border: none; font-size: 12px; line-height: 1; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; padding: 0;
+  }
+  .photo-count-label { font-size: 11.5px; color: var(--text-muted); margin-bottom: 6px; }
+  .lot-fields { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .lot-fields.full { grid-template-columns: 1fr; }
+  .field label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 3px; }
+  .field-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .field input, .field select, .field textarea { width: 100%; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); padding: 7px 9px; font-size: 13.5px; border-radius: 4px; }
+  .field textarea { min-height: 46px; resize: vertical; }
+  .lot-actions { display: flex; flex-direction: column; gap: 6px; flex: none; }
+  .id-tag { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+
+  .offer-card { border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 10px; background: var(--surface); }
+  .offer-top { display: flex; justify-content: space-between; gap: 10px; }
+  .offer-amount { font-family: "IBM Plex Mono"; font-weight: 600; }
+  .badge { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 3px; }
+  .badge-good { background: var(--good-bg); color: var(--good); }
+  .badge-warn { background: var(--warn-bg); color: var(--warn); }
+  .badge-bad { background: var(--bad-bg); color: var(--bad); }
+  .offer-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .offer-actions { display: flex; gap: 6px; margin-top: 8px; }
+
+  .log-row { border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 13px; }
+  .log-row:last-child { border-bottom: none; }
+  .log-meta { color: var(--text-muted); font-size: 11.5px; margin-top: 2px; }
+
+  .gate { min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .gate-box { max-width: 320px; width: 100%; text-align: center; }
+  .gate-box input { width: 100%; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); padding: 10px; font-size: 15px; border-radius: 4px; margin: 14px 0 8px; text-align: center; }
+  .empty { color: var(--text-muted); font-size: 13.5px; padding: 16px 0; }
+  .fine { font-size: 11.5px; color: var(--text-muted); margin-top: 18px; line-height: 1.5; }
+  .admin-toast {
+    position: fixed; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    background: var(--surface); color: var(--text); border: 1px solid var(--border);
+    padding: 12px 18px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    font-size: 14px; font-weight: 500; z-index: 300; opacity: 0; pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease; max-width: calc(100vw - 32px);
+  }
+  .admin-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .admin-toast.err { border-color: var(--bad); color: var(--bad); }
+</style>
+</head>
+<body>
+
+<div id="gate" class="gate">
+  <div class="gate-box">
+    <h1 style="font-size:26px;">Admin sign in</h1>
+    <p style="color:var(--text-muted);font-size:13.5px;margin-top:8px;">This is a lightweight prototype lock. A production build needs real admin accounts and permissions.</p>
+    <input type="password" id="gatePass" placeholder="Passcode (demo: admin1234)" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+    <button class="btn btn-accent" style="width:100%;" onclick="tryGate()">Enter</button>
+    <div id="gateError" style="color:var(--bad);font-size:12.5px;margin-top:8px;"></div>
+  </div>
+</div>
+
+<div id="app" style="display:none;">
+<header class="top">
+  <div class="top-row">
+    <span class="brand"><span class="b-tech">tech</span>&#9654;<span class="b-renew">renew</span> <span style="font-size:13px;color:var(--text-muted);font-weight:500;">/ Admin</span></span>
+    <button class="btn btn-sm" onclick="signOutAdmin()">Sign out</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="tabs2" id="mainTabs">
+    <button class="tab2 active" data-panel="panelLots">Manage lots</button>
+    <button class="tab2" data-panel="panelOffers">Offers</button>
+    <button class="tab2" data-panel="panelCustomers">Customers</button>
+    <button class="tab2" data-panel="panelEmail">Email log</button>
+  </div>
+
+  <!-- ===== LOTS PANEL ===== -->
+  <section id="panelLots" class="panel active">
+    <div class="card2">
+      <h3 style="font-size:18px;margin-bottom:10px;">Add a new lot</h3>
+      <div class="lot-fields">
+        <div class="field"><label>Category</label>
+          <select id="newCat">
+            <option value="desktop">Desktop</option>
+            <option value="laptop">Laptop</option>
+            <option value="server">Server</option>
+            <option value="memory">Memory</option>
+            <option value="power">Power</option>
+          </select>
+        </div>
+        <div class="field"><label>Grade</label>
+          <select id="newGrade">
+            <option value="A">Grade A · Like new</option>
+            <option value="B">Grade B · Light wear</option>
+            <option value="C">Grade C · Functional</option>
+          </select>
+        </div>
+        <div class="field"><label>Title</label><input id="newTitle" placeholder="e.g. Dell OptiPlex 7080 Micro"></div>
+        <div class="field"><label>Lot ID (optional)</label><input id="newId" placeholder="auto-generated if blank, e.g. TR-SRV-0231"></div>
+        <div class="field"><label>Asking price (USD)</label><input id="newPrice" type="number" min="1" placeholder="150"></div>
+        <div class="field" style="grid-column:1/-1;"><label>Spec / description</label><textarea id="newSpec" placeholder="e.g. Core i5-10500T · 256GB SSD · 16GB RAM"></textarea></div>
+        <div class="field"><label>Closes at (Eastern Time)</label><input id="newCloseAt" type="datetime-local">
+          <div class="field-hint">US Eastern Time (UTC-5). This prototype doesn't adjust for daylight saving.</div>
+        </div>
+        <div class="field"><label>Photos (up to 10)</label><input id="newPhoto" type="file" accept="image/*" multiple></div>
+      </div>
+      <div style="margin-top:12px;"><button class="btn btn-accent" onclick="addLot()">Add lot</button></div>
+    </div>
+
+    <div class="tabs2" id="catFilterTabs">
+      <button class="tab2 active" data-cat="all">All</button>
+      <button class="tab2" data-cat="desktop">Desktop</button>
+      <button class="tab2" data-cat="laptop">Laptop</button>
+      <button class="tab2" data-cat="server">Server</button>
+      <button class="tab2" data-cat="memory">Memory</button>
+      <button class="tab2" data-cat="power">Power</button>
+    </div>
+    <div id="lotList"></div>
+  </section>
+
+  <!-- ===== OFFERS PANEL ===== -->
+  <section id="panelOffers" class="panel">
+    <div id="offerList"></div>
+  </section>
+
+  <!-- ===== CUSTOMERS PANEL ===== -->
+  <section id="panelCustomers" class="panel">
+    <div class="card2" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <p style="font-size:13px;color:var(--text-muted);margin:0;">Accounts customers created on the site (name, email, shipping address, alert preference).</p>
+      <button class="btn btn-sm btn-accent" onclick="downloadCustomersCSV()">Download CSV</button>
+    </div>
+    <div id="customerList"></div>
+  </section>
+
+  <!-- ===== EMAIL LOG PANEL ===== -->
+  <section id="panelEmail" class="panel">
+    <div class="card2">
+      <p style="font-size:13px;color:var(--text-muted);">This is a simulation of sent emails. Real delivery needs a backend connected to an email API (e.g. Resend, SendGrid). An entry is added here every time an offer is submitted, accepted, or declined.</p>
+    </div>
+    <div id="emailLog" class="card2"></div>
+  </section>
+
+  <p class="fine">This admin page is a prototype. Data is stored only in this browser's localStorage and is not shared with other devices or users. Hosting it on the same domain as index.html (e.g. GitHub Pages) lets it share data with the customer site.</p>
+</div>
+</div>
+
+
+<div class="admin-toast" id="adminToast"></div>
+
+<script>
+(function(){
+  "use strict";
+  function safeGet(key, fallback){ try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch(e){ return fallback; } }
+  function safeSet(key, val){ try { localStorage.setItem(key, JSON.stringify(val)); return true; } catch(e){ return false; } }
+
+  function showNotice(msg, isError){
+    var t = document.getElementById("adminToast");
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.toggle("err", !!isError);
+    t.classList.add("show");
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function(){ t.classList.remove("show"); }, 3400);
+  }
+
+  var GRADE_LABEL = { A:"Grade A · Like new", B:"Grade B · Light wear", C:"Grade C · Functional" };
+  var GRADE_CLASS = { A:"badge-good", B:"badge-warn", C:"badge-bad" };
+  var CAT_LABEL = { desktop:"Desktop", laptop:"Laptop", server:"Server", memory:"Memory", power:"Power" };
+
+  /* ---- gate ---- */
+  window.tryGate = function(){
+    var v = document.getElementById("gatePass").value.trim();
+    if (v === "admin1234") {
+      document.getElementById("gate").style.display = "none";
+      document.getElementById("app").style.display = "block";
+      boot();
+    } else {
+      document.getElementById("gateError").textContent = "Incorrect passcode.";
+    }
+  };
+  document.getElementById("gatePass").addEventListener("keydown", function(e){
+    if (e.key === "Enter") tryGate();
+  });
+  window.signOutAdmin = function(){
+    document.getElementById("app").style.display = "none";
+    document.getElementById("gate").style.display = "flex";
+    document.getElementById("gatePass").value = "";
+  };
+
+  /* ---- tabs ---- */
+  document.getElementById("mainTabs").addEventListener("click", function(e){
+    var btn = e.target.closest(".tab2"); if (!btn) return;
+    Array.prototype.forEach.call(document.querySelectorAll("#mainTabs .tab2"), function(b){ b.classList.toggle("active", b === btn); });
+    Array.prototype.forEach.call(document.querySelectorAll(".panel"), function(p){ p.classList.toggle("active", p.id === btn.dataset.panel); });
+    if (btn.dataset.panel === "panelOffers") renderOffers();
+    if (btn.dataset.panel === "panelEmail") renderEmailLog();
+    if (btn.dataset.panel === "panelCustomers") renderCustomers();
+  });
+
+  var activeCat = "all";
+  document.getElementById("catFilterTabs").addEventListener("click", function(e){
+    var btn = e.target.closest(".tab2"); if (!btn) return;
+    Array.prototype.forEach.call(document.querySelectorAll("#catFilterTabs .tab2"), function(b){ b.classList.toggle("active", b === btn); });
+    activeCat = btn.dataset.cat;
+    renderLots();
+  });
+
+  function boot(){
+    renderLots();
+    renderOffers();
+    renderEmailLog();
+    renderCustomers();
+  }
+
+  /* ---- lots ---- */
+  var DEFAULT_ITEMS = [
+    { id:"TR-DSK-0142", cat:"desktop", icon:"ic-desktop", title:"HP EliteDesk 705 G5 SFF",
+      spec:"AMD Athlon 300GE · 512GB SSD · 32GB RAM · Win 11 Pro", grade:"A", asking:130, hours:30 },
+    { id:"TR-DSK-0138", cat:"desktop", icon:"ic-desktop", title:"Dell OptiPlex 7080 Micro",
+      spec:"Core i5-10500T · 256GB SSD · 16GB RAM · No OS", grade:"B", asking:145, hours:18 },
+    { id:"TR-DSK-0151", cat:"desktop", icon:"ic-desktop", title:"HP ProDesk 600 G5 SFF",
+      spec:"Core i5-9500 · 512GB SSD · 16GB RAM · No OS", grade:"B", asking:120, hours:44 },
+    { id:"TR-LAP-0873", cat:"laptop", icon:"ic-laptop", title:"Dell Latitude 5320",
+      spec:"Core i5-1145G7 · 512GB SSD · 16GB RAM · 13.3\" FHD · missing keycap", grade:"B", asking:155, hours:9 },
+    { id:"TR-LAP-0869", cat:"laptop", icon:"ic-laptop", title:"Dell Precision 5520",
+      spec:"Core i7-7820HQ · 256GB SSD · 16GB RAM · no OS / no charger", grade:"C", asking:200, hours:26 },
+    { id:"TR-LAP-0855", cat:"laptop", icon:"ic-laptop", title:"Lenovo ThinkPad E14",
+      spec:"Core i7-10510U · 256GB SSD · 8GB RAM · no OS", grade:"B", asking:175, hours:52 },
+    { id:"TR-SRV-0231", cat:"server", icon:"ic-server", title:"Dell PowerEdge R720 2U",
+      spec:"2x Xeon E5-2670 · 128GB RAM · 8x 600GB SAS · rail kit incl.", grade:"B", asking:520, hours:37 },
+    { id:"TR-SRV-0228", cat:"server", icon:"ic-server", title:"HP ProLiant DL380 G9 2U",
+      spec:"2x Xeon E5-2680v4 · 256GB RAM · 8x SFF bays", grade:"A", asking:690, hours:14 },
+    { id:"TR-SRV-0219", cat:"server", icon:"ic-server", title:"Dell PowerEdge R730xd",
+      spec:"2x Xeon E5-2690v4 · 192GB RAM · 12x 4TB storage bays", grade:"B", asking:810, hours:60 },
+    { id:"TR-MEM-1042", cat:"memory", icon:"ic-memory", title:"Samsung 32GB PC4-2400T RDIMM",
+      spec:"Server memory · 2Rx4 · lot of 4 (128GB total)", grade:"A", asking:225, hours:22 },
+    { id:"TR-MEM-1039", cat:"memory", icon:"ic-memory", title:"SK Hynix 32GB PC4-2400T RDIMM",
+      spec:"Server memory · single module", grade:"A", asking:60, hours:11 },
+    { id:"TR-MEM-1024", cat:"memory", icon:"ic-memory", title:"Micron 16GB PC3L-10600R RDIMM",
+      spec:"Server memory · lot of 10", grade:"B", asking:280, hours:41 },
+    { id:"TR-PWR-0311", cat:"power", icon:"ic-power", title:"HP ProLiant 800W Hot-Swap PSU",
+      spec:"Hot-swap server power supply · tested under load", grade:"A", asking:45, hours:20 },
+    { id:"TR-PWR-0307", cat:"power", icon:"ic-power", title:"Dell PowerEdge 1100W Redundant PSU",
+      spec:"Redundant power supply module", grade:"B", asking:38, hours:33 },
+    { id:"TR-PWR-0298", cat:"power", icon:"ic-power", title:"APC Smart-UPS 1500VA Rack Mount",
+      spec:"2U rack UPS · new batteries installed", grade:"A", asking:210, hours:48 }
+  ];
+
+  function getLots(){
+    var list = safeGet("tr_listings", []) || [];
+    var seeded = safeGet("tr_seeded_defaults", false);
+    if (!seeded) {
+      var existingIds = {};
+      list.forEach(function(it){ existingIds[it.id] = true; });
+      var changed = false;
+      DEFAULT_ITEMS.forEach(function(def){
+        if (!existingIds[def.id]) { list.push(def); changed = true; }
+      });
+      if (changed) safeSet("tr_listings", list);
+      safeSet("tr_seeded_defaults", true);
+    }
+    return list;
+  }
+  function setLots(list){
+    var ok = safeSet("tr_listings", list);
+    if (!ok) showNotice("Storage limit reached — this browser's local storage is full. Try removing a photo or using fewer/smaller photos on this lot.", true);
+    return ok;
+  }
+
+  function genId(cat){
+    var prefix = { desktop:"TR-DSK", laptop:"TR-LAP", server:"TR-SRV", memory:"TR-MEM", power:"TR-PWR" }[cat] || "TR-GEN";
+    return prefix + "-" + Math.floor(1000 + Math.random()*9000);
+  }
+
+  var EST_OFFSET_MS = 5 * 3600 * 1000; // UTC-5, no daylight saving adjustment
+
+  function estStringToUTCms(str){
+    if (!str) return null;
+    var parts = str.split(/[-T:]/).map(Number); // [Y, M, D, H, Min]
+    if (parts.length < 5 || parts.some(isNaN)) return null;
+    var wallClockAsUTC = Date.UTC(parts[0], parts[1] - 1, parts[2], parts[3], parts[4]);
+    return wallClockAsUTC + EST_OFFSET_MS;
+  }
+
+  function defaultCloseAtString(hoursAhead){
+    var estMs = Date.now() + hoursAhead * 3600 * 1000 - EST_OFFSET_MS;
+    var d = new Date(estMs);
+    function pad(n){ return String(n).padStart(2, "0"); }
+    return d.getUTCFullYear() + "-" + pad(d.getUTCMonth() + 1) + "-" + pad(d.getUTCDate()) + "T" + pad(d.getUTCHours()) + ":" + pad(d.getUTCMinutes());
+  }
+  var newCloseAtInput = document.getElementById("newCloseAt");
+  if (newCloseAtInput) newCloseAtInput.value = defaultCloseAtString(24);
+
+  function compressImage(file, maxDim, quality){
+    return new Promise(function(resolve){
+      var reader = new FileReader();
+      reader.onload = function(e){
+        var img = new Image();
+        img.onload = function(){
+          var w = img.width, h = img.height;
+          var scale = Math.min(1, maxDim / Math.max(w, h));
+          var cw = Math.max(1, Math.round(w * scale));
+          var ch = Math.max(1, Math.round(h * scale));
+          var canvas = document.createElement("canvas");
+          canvas.width = cw; canvas.height = ch;
+          var ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, cw, ch);
+          try { resolve(canvas.toDataURL("image/jpeg", quality)); }
+          catch (err) { resolve(e.target.result); }
+        };
+        img.onerror = function(){ resolve(e.target.result); };
+        img.src = e.target.result;
+      };
+      reader.onerror = function(){ resolve(null); };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function readFilesAsDataURLs(fileList, max){
+    var files = Array.prototype.slice.call(fileList).slice(0, max);
+    return Promise.all(files.map(function(file){
+      return compressImage(file, 900, 0.72);
+    })).then(function(results){ return results.filter(Boolean); });
+  }
+
+  window.addLot = function(){
+    var cat = document.getElementById("newCat").value;
+    var grade = document.getElementById("newGrade").value;
+    var title = document.getElementById("newTitle").value.trim();
+    var customId = document.getElementById("newId").value.trim();
+    var price = parseFloat(document.getElementById("newPrice").value);
+    var spec = document.getElementById("newSpec").value.trim();
+    var closeAtStr = document.getElementById("newCloseAt").value;
+    var closeAtUTCms = estStringToUTCms(closeAtStr);
+    var fileInput = document.getElementById("newPhoto");
+
+    if (!title || !price) { showNotice("Enter a title and an asking price.", true); return; }
+    if (!closeAtUTCms) { showNotice("Pick a close date and time.", true); return; }
+    if (closeAtUTCms <= Date.now()) { showNotice("Pick a close time in the future.", true); return; }
+
+    var existingList = getLots();
+    if (customId && existingList.some(function(it){ return it.id === customId; })) {
+      showNotice("Lot ID \"" + customId + "\" is already in use — pick a different one or leave it blank to auto-generate.", true);
+      return;
+    }
+
+    function finish(photos){
+      var list = getLots();
+      var id = customId || genId(cat);
+      list.push({ id: id, cat: cat, icon: "ic-" + cat, title: title, spec: spec, grade: grade, asking: price, photos: photos });
+      setLots(list);
+      var deadlines = safeGet("tr_deadlines", {});
+      deadlines[id] = closeAtUTCms;
+      safeSet("tr_deadlines", deadlines);
+      notifySubscribers(title, price, CAT_LABEL[cat]);
+      showNotice("Lot added: " + title);
+      document.getElementById("newTitle").value = "";
+      document.getElementById("newId").value = "";
+      document.getElementById("newPrice").value = "";
+      document.getElementById("newSpec").value = "";
+      document.getElementById("newCloseAt").value = defaultCloseAtString(24);
+      fileInput.value = "";
+      renderLots();
+    }
+
+    if (fileInput.files && fileInput.files.length) {
+      if (fileInput.files.length > 10) showNotice("Only the first 10 photos will be used.");
+      readFilesAsDataURLs(fileInput.files, 10).then(finish);
+    } else {
+      finish([]);
+    }
+  };
+
+  window.deleteLot = function(id, btn){
+    if (btn && btn.dataset.armed !== "1") {
+      btn.dataset.armed = "1";
+      btn.dataset.originalText = btn.textContent;
+      btn.textContent = "Confirm?";
+      btn._armTimer = setTimeout(function(){
+        btn.dataset.armed = "0";
+        btn.textContent = btn.dataset.originalText;
+      }, 3000);
+      return;
+    }
+    setLots(getLots().filter(function(it){ return it.id !== id; }));
+    renderLots();
+  };
+
+  window.saveLot = function(id){
+    var row = document.querySelector('[data-lot-row="' + id + '"]');
+    var list = getLots();
+    var idx = list.findIndex(function(it){ return it.id === id; });
+    if (idx === -1) return;
+    list[idx].title = row.querySelector('[data-f="title"]').value.trim();
+    list[idx].spec = row.querySelector('[data-f="spec"]').value.trim();
+    list[idx].grade = row.querySelector('[data-f="grade"]').value;
+    list[idx].asking = parseFloat(row.querySelector('[data-f="asking"]').value) || list[idx].asking;
+    setLots(list);
+    renderLots();
+  };
+
+  window.addPhotos = function(id, fileList){
+    var list = getLots();
+    var idx = list.findIndex(function(it){ return it.id === id; });
+    if (idx === -1) return;
+    var existing = list[idx].photos || [];
+    var room = 10 - existing.length;
+    if (room <= 0) { showNotice("This lot already has 10 photos — remove one first.", true); return; }
+    if (fileList.length > room) showNotice("Only " + room + " more photo(s) will be added (10 max per lot).");
+    readFilesAsDataURLs(fileList, room).then(function(newPhotos){
+      list[idx].photos = existing.concat(newPhotos);
+      setLots(list);
+      renderLots();
+    });
+  };
+
+  window.removePhoto = function(id, photoIdx){
+    var list = getLots();
+    var idx = list.findIndex(function(it){ return it.id === id; });
+    if (idx === -1 || !list[idx].photos) return;
+    list[idx].photos.splice(photoIdx, 1);
+    setLots(list);
+    renderLots();
+  };
+
+  function renderLots(){
+    var list = getLots().filter(function(it){ return activeCat === "all" || it.cat === activeCat; });
+    var wrap = document.getElementById("lotList");
+    if (!list.length) { wrap.innerHTML = '<div class="empty">No lots in this category yet.</div>'; return; }
+    wrap.innerHTML = list.map(function(it){
+      var photos = it.photos || (it.photo ? [it.photo] : []);
+      var thumb = photos.length ? '<img class="thumb" src="' + photos[0] + '" alt="">' : '<div class="thumb"></div>';
+      var strip = photos.map(function(p, i){
+        return '<div class="photo-thumb-wrap"><img src="' + p + '" alt="">' +
+          '<button class="photo-remove" onclick="removePhoto(\'' + it.id + '\',' + i + ')" title="Remove">&times;</button></div>';
+      }).join("");
+      return '<div class="lot-row" data-lot-row="' + it.id + '">' +
+        thumb +
+        '<div style="flex:1;">' +
+          '<div class="id-tag mono">' + it.id + ' · ' + CAT_LABEL[it.cat] + '</div>' +
+          '<div class="lot-fields">' +
+            '<div class="field" style="grid-column:1/-1;"><label>Title</label><input data-f="title" value="' + escapeAttr(it.title) + '"></div>' +
+            '<div class="field" style="grid-column:1/-1;"><label>Spec</label><textarea data-f="spec">' + escapeHtml(it.spec || "") + '</textarea></div>' +
+            '<div class="field"><label>Grade</label><select data-f="grade">' +
+              ['A','B','C'].map(function(g){ return '<option value="' + g + '"' + (g === it.grade ? ' selected' : '') + '>' + GRADE_LABEL[g] + '</option>'; }).join("") +
+            '</select></div>' +
+            '<div class="field"><label>Asking price (USD)</label><input data-f="asking" type="number" value="' + it.asking + '"></div>' +
+            '<div class="field" style="grid-column:1/-1;">' +
+              '<label>Photos (' + photos.length + '/10)</label>' +
+              '<div class="photo-strip">' + strip + '</div>' +
+              (photos.length < 10 ? '<input type="file" accept="image/*" multiple onchange="addPhotos(\'' + it.id + '\', this.files)">' : '<div class="photo-count-label">Maximum reached — remove one to add another.</div>') +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="lot-actions">' +
+          '<button class="btn btn-sm btn-accent" onclick="saveLot(\'' + it.id + '\')">Save</button>' +
+          '<button class="btn btn-sm btn-danger" onclick="deleteLot(\'' + it.id + '\', this)">Delete</button>' +
+        '</div>' +
+      '</div>';
+    }).join("");
+  }
+
+  function escapeHtml(s){ return (s||"").replace(/[&<>]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]; }); }
+  function escapeAttr(s){ return escapeHtml(s).replace(/"/g, "&quot;"); }
+
+  /* ---- offers ---- */
+  function getOffers(){ return safeGet("tr_offers", []); }
+  function setOffers(list){ safeSet("tr_offers", list); }
+  function addLog(text, meta){
+    var log = safeGet("tr_email_log", []);
+    log.unshift({ text: text, meta: meta, at: Date.now() });
+    safeSet("tr_email_log", log);
+  }
+
+  function notifySubscribers(lotTitle, price, categoryLabel){
+    var accounts = safeGet("tr_accounts", {});
+    var subscribers = Object.keys(accounts).filter(function(email){ return accounts[email].notifyNewLots; });
+    if (!subscribers.length) return;
+    addLog(
+      "New lot alert: " + lotTitle,
+      subscribers.length + " subscriber" + (subscribers.length === 1 ? "" : "s") + " notified · " + categoryLabel + " · $" + price
+    );
+  }
+
+  window.decideOffer = function(idx, status){
+    var list = getOffers();
+    if (!list[idx]) return;
+    list[idx].status = status;
+    setOffers(list);
+    addLog(
+      (status === "Accepted" ? "Acceptance email sent: " : "Decline email sent: ") + list[idx].itemTitle,
+      list[idx].email + " · $" + list[idx].amount
+    );
+    renderOffers();
+    renderEmailLog();
+  };
+
+  function renderOffers(){
+    var list = getOffers();
+    var wrap = document.getElementById("offerList");
+    if (!list.length) { wrap.innerHTML = '<div class="empty">No offers yet.</div>'; return; }
+    wrap.innerHTML = list.map(function(o, i){
+      var cls = o.status === "Accepted" ? "badge-good" : o.status === "Declined" ? "badge-bad" : "badge-warn";
+      return '<div class="offer-card">' +
+        '<div class="offer-top"><div><strong>' + escapeHtml(o.itemTitle) + '</strong><div class="offer-meta">' + escapeHtml(o.email) + '</div></div>' +
+        '<span class="badge ' + cls + '">' + o.status + '</span></div>' +
+        '<div class="offer-amount" style="margin-top:6px;">$' + o.amount + '</div>' +
+        (o.note ? '<div class="offer-meta" style="margin-top:4px;">' + escapeHtml(o.note) + '</div>' : '') +
+        '<div class="offer-meta">' + new Date(o.submittedAt).toLocaleString("en-US") + '</div>' +
+        (o.status === "Pending review" ?
+          '<div class="offer-actions">' +
+            '<button class="btn btn-sm btn-accent" onclick="decideOffer(' + i + ',\'Accepted\')">Accept</button>' +
+            '<button class="btn btn-sm btn-danger" onclick="decideOffer(' + i + ',\'Declined\')">Decline</button>' +
+          '</div>' : '') +
+      '</div>';
+    }).join("");
+  }
+
+  function renderEmailLog(){
+    var log = safeGet("tr_email_log", []);
+    var wrap = document.getElementById("emailLog");
+    if (!log.length) { wrap.innerHTML = '<div class="empty">No email log entries yet.</div>'; return; }
+    wrap.innerHTML = log.map(function(l){
+      return '<div class="log-row"><div>' + escapeHtml(l.text) + '</div><div class="log-meta">' + escapeHtml(l.meta || "") + ' · ' + new Date(l.at).toLocaleString("en-US") + '</div></div>';
+    }).join("");
+  }
+
+  /* ---- customers ---- */
+  function getCustomers(){
+    var accounts = safeGet("tr_accounts", {});
+    return Object.keys(accounts).map(function(email){
+      var a = accounts[email];
+      return {
+        email: email,
+        name: a.name || "",
+        address: a.address || "",
+        city: a.city || "",
+        state: a.state || "",
+        zip: a.zip || "",
+        country: a.country || "",
+        notifyNewLots: !!a.notifyNewLots
+      };
+    });
+  }
+
+  function renderCustomers(){
+    var customers = getCustomers();
+    var wrap = document.getElementById("customerList");
+    if (!customers.length) { wrap.innerHTML = '<div class="empty">No customer accounts yet.</div>'; return; }
+    wrap.innerHTML = customers.map(function(c){
+      var addressLine = [c.address, c.city, c.state, c.zip, c.country].filter(Boolean).join(", ");
+      return '<div class="offer-card">' +
+        '<div class="offer-top"><strong>' + escapeHtml(c.name || "(no name)") + '</strong>' +
+        '<span class="badge ' + (c.notifyNewLots ? "badge-good" : "badge-warn") + '">' + (c.notifyNewLots ? "Subscribed" : "Not subscribed") + '</span></div>' +
+        '<div class="offer-meta">' + escapeHtml(c.email) + '</div>' +
+        (addressLine ? '<div class="offer-meta" style="margin-top:4px;">' + escapeHtml(addressLine) + '</div>' : '') +
+        '</div>';
+    }).join("");
+  }
+
+  function csvEscape(val){
+    var s = String(val == null ? "" : val);
+    if (/[",\n]/.test(s)) s = '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+
+  window.downloadCustomersCSV = async function(){
+    var customers = getCustomers();
+    if (!customers.length) { showNotice("No customer accounts to download yet.", true); return; }
+    var headers = ["Name", "Email", "Address", "City", "State", "ZIP", "Country", "New lot alerts"];
+    var rows = customers.map(function(c){
+      return [c.name, c.email, c.address, c.city, c.state, c.zip, c.country, c.notifyNewLots ? "Yes" : "No"]
+        .map(csvEscape).join(",");
+    });
+    var csv = headers.map(csvEscape).join(",") + "\n" + rows.join("\n");
+    var filename = "techrenew-customers-" + new Date().toISOString().slice(0, 10) + ".csv";
+
+    if (window.claude && typeof window.claude.use === "function") {
+      try {
+        var downloads = await window.claude.use("downloads");
+        if (downloads) {
+          await downloads.save({ filename: filename, data: csv });
+          showNotice("Downloaded " + customers.length + " customer" + (customers.length === 1 ? "" : "s") + " as CSV.");
+          return;
+        }
+      } catch (err) {
+        if (err && err.code === "declined") return;
+        // fall through to the standard browser download below
+      }
+    }
+
+    var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showNotice("Downloaded " + customers.length + " customer" + (customers.length === 1 ? "" : "s") + " as CSV.");
+  };
+
+})();
+</script>
+</body>
+</html>

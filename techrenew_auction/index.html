@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>techrenew — Offer Lots</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+
+    --bg: #14171B;
+    --surface: #1B1F24;
+    --surface-2: #22262C;
+    --border: #33383F;
+    --text: #ECEDEE;
+    --text-muted: #9AA0A8;
+    --accent: #E2A33D;
+    --accent-ink: #14171B;
+    --good: #6FB484;
+    --good-bg: #1E2A22;
+    --warn: #E28A52;
+    --warn-bg: #2E2119;
+    --bad: #D97A6E;
+    --bad-bg: #2E1E1C;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4);
+    --brand-orange: #DD7E2C;
+    --brand-green: #7CB342;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .display {
+    font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.05;
+    margin: 0;
+  }
+  .mono { font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace; }
+  a { color: inherit; }
+  img, svg { max-width: 100%; }
+  button { font-family: inherit; cursor: pointer; }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- Header ---------- */
+  header.site {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .header-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0; gap: 16px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand-mark {
+    width: 42px; height: 42px; border-radius: 50%; background: #FFFFFF;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex: none;
+  }
+  .brand-mark svg { width: 19px; height: 19px; color: var(--brand-green); }
+  .brand-name { font-size: 28px; letter-spacing: 0.01em; font-weight: 700; }
+  .brand-name .b-tech { color: var(--brand-orange); }
+  .brand-name .b-renew { color: var(--brand-green); }
+  .brand-name .b-arrow { color: var(--brand-green); font-size: 0.6em; padding: 0 1px; }
+  .brand-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 0.02em; margin-top: -1px; }
+
+  .header-actions { display: flex; align-items: center; gap: 10px; flex: none; }
+  .btn {
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text); padding: 9px 14px; font-size: 14px; font-weight: 500;
+    border-radius: 3px; white-space: nowrap;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-accent { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  .btn-ghost { border-color: transparent; background: transparent; padding: 9px 8px; }
+  .btn-block { width: 100%; }
+
+  /* category bar */
+  .cat-bar {
+    display: flex; gap: 8px; overflow-x: auto; padding: 10px 0 12px;
+    -ms-overflow-style: none; scrollbar-width: none;
+  }
+  .cat-bar::-webkit-scrollbar { display: none; }
+  .cat-chip {
+    flex: none; border: 1px solid var(--border); background: var(--surface-2);
+    color: var(--text-muted); padding: 7px 13px; font-size: 13px; font-weight: 500;
+    border-radius: 999px;
+  }
+  .cat-chip.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: 36px 0 28px; border-bottom: 1px solid var(--border); }
+  .hero-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: end; }
+  .hero h1 { font-size: clamp(34px, 6vw, 54px); max-width: 12ch; }
+  .hero p.lede { color: var(--text-muted); font-size: 16px; max-width: 46ch; margin-top: 14px; line-height: 1.5; }
+  .hero-cta { display: flex; gap: 10px; margin-top: 20px; }
+
+  .stat-plate {
+    border: 1px solid var(--border); background: var(--surface); border-radius: 4px;
+    overflow: hidden;
+  }
+  .stat-row { display: flex; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { color: var(--text-muted); font-size: 13px; }
+  .stat-value { font-family: "IBM Plex Mono"; font-size: 13px; font-weight: 500; }
+
+  @media (max-width: 760px) {
+    .hero-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Listings ---------- */
+  section.listings { padding: 34px 0 60px; }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
+  .section-head h2 { font-size: 26px; }
+  .section-head .count { color: var(--text-muted); font-size: 13px; font-family: "IBM Plex Mono"; }
+
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px;
+  }
+  .card {
+    border: 1px solid var(--border); background: var(--surface);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+    padding: 16px 16px 18px; display: flex; flex-direction: column; gap: 10px;
+    text-align: left; cursor: pointer; transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  @media (hover: hover) {
+    .card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: var(--shadow); }
+  }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .card-icon { width: 30px; height: 30px; color: var(--text-muted); flex: none; }
+  .card-photo { width: 48px; height: 48px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); flex: none; cursor: pointer; }
+  .card-media { position: relative; flex: none; }
+  .photo-count {
+    position: absolute; bottom: -4px; right: -4px; background: var(--text); color: var(--bg);
+    font-size: 9.5px; font-family: "IBM Plex Mono"; line-height: 1; padding: 2px 4px; border-radius: 999px;
+    pointer-events: none;
+  }
+  .det-photo-wrap { position: relative; width: 100%; aspect-ratio: 4/3; border-radius: 6px; overflow: hidden; background: var(--surface-2); }
+  .det-photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: pointer; }
+  .det-photo-wrap .card-icon { width: 40px; height: 40px; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+  .det-photo-count {
+    position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.55); color: #fff;
+    font-size: 11px; font-family: "IBM Plex Mono"; padding: 3px 8px; border-radius: 999px;
+  }
+  .badge {
+    font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 3px;
+    white-space: nowrap;
+  }
+  .badge-good { background: var(--good-bg); color: var(--good); }
+  .badge-warn { background: var(--warn-bg); color: var(--warn); }
+  .badge-bad { background: var(--bad-bg); color: var(--bad); }
+
+  .card-id { font-size: 11px; color: var(--text-muted); }
+  .card-title { font-size: 16px; font-weight: 600; line-height: 1.3; }
+  .card-spec { font-size: 12.5px; color: var(--text-muted); line-height: 1.4; font-family: "IBM Plex Mono"; }
+
+  .card-bottom { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
+  .price-row { display: flex; justify-content: space-between; align-items: baseline; }
+  .price { font-size: 20px; font-weight: 700; font-family: "IBM Plex Mono"; }
+  .price-label { font-size: 10.5px; color: var(--text-muted); }
+  .closes { font-size: 11.5px; color: var(--warn); font-family: "IBM Plex Mono"; }
+
+  /* ---------- Modal ---------- */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(10,12,14,0.55);
+    display: none; align-items: flex-end; justify-content: center; z-index: 100;
+    padding: 0;
+  }
+  .overlay.open { display: flex; }
+  @media (min-width: 640px) {
+    .overlay { align-items: center; padding: 20px; }
+  }
+  .modal {
+    background: var(--surface); width: 100%; max-width: 460px;
+    border-radius: 10px 10px 0 0;
+    max-height: 88vh; overflow-y: auto;
+    padding: 20px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+    border: 1px solid var(--border); border-bottom: none;
+  }
+  @media (min-width: 640px) {
+    .modal { border-radius: 6px; border-bottom: 1px solid var(--border); }
+  }
+  .modal-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; gap: 10px; }
+  .modal-head h3 { font-size: 22px; }
+  .close-x { background: none; border: none; color: var(--text-muted); font-size: 22px; line-height: 1; padding: 4px; }
+
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 12.5px; color: var(--text-muted); margin-bottom: 5px; }
+  .field input, .field textarea {
+    width: 100%; border: 1px solid var(--border); background: var(--surface-2);
+    color: var(--text); padding: 10px 11px; font-size: 15px; border-radius: 4px;
+    font-family: inherit;
+  }
+  .cselect { position: relative; }
+  .cselect-btn {
+    width: 100%; text-align: left; border: 1px solid var(--border); background: var(--surface-2);
+    color: var(--text); padding: 10px 32px 10px 11px; font-size: 15px; border-radius: 4px;
+    font-family: inherit; position: relative; cursor: pointer;
+  }
+  .cselect-btn.placeholder { color: var(--text-muted); }
+  .cselect-btn::after {
+    content: ""; position: absolute; right: 12px; top: 50%; width: 8px; height: 8px;
+    border-right: 1.5px solid var(--text-muted); border-bottom: 1.5px solid var(--text-muted);
+    transform: translateY(-70%) rotate(45deg);
+  }
+  .cselect-menu {
+    position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 60;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+    max-height: 220px; overflow-y: auto; box-shadow: var(--shadow);
+  }
+  .cselect-menu[hidden] { display: none; }
+  .cselect-option { padding: 9px 12px; font-size: 14px; color: var(--text); cursor: pointer; }
+  .cselect-option:hover, .cselect-option.hl { background: var(--surface-2); }
+  .cselect-option.selected { color: var(--accent); font-weight: 600; }
+  .field textarea { resize: vertical; min-height: 64px; }
+  .field-hint { font-size: 11.5px; color: var(--text-muted); margin-top: 5px; }
+  .checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--text); margin-bottom: 14px; cursor: pointer; }
+  .checkbox-row input { width: 16px; height: 16px; flex: none; accent-color: var(--accent); }
+  .tabs { display: flex; gap: 4px; margin-bottom: 16px; background: var(--surface-2); padding: 3px; border-radius: 6px; }
+  .tab { flex: 1; text-align: center; padding: 8px; font-size: 13.5px; font-weight: 500; border: none; background: transparent; color: var(--text-muted); border-radius: 4px; }
+  .tab.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+  .fine { font-size: 11.5px; color: var(--text-muted); margin-top: 14px; line-height: 1.5; border-top: 1px solid var(--border); padding-top: 12px; }
+  .error-msg { color: var(--bad); font-size: 13px; margin-top: -6px; margin-bottom: 12px; display: none; }
+  .toast {
+    position: fixed; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    background: var(--surface); color: var(--text); border: 1px solid var(--border);
+    padding: 12px 18px 12px 14px; border-radius: 8px; box-shadow: var(--shadow);
+    font-size: 14px; font-weight: 500; z-index: 200; opacity: 0; pointer-events: none;
+    transition: opacity 0.28s ease, transform 0.28s cubic-bezier(.2,.8,.3,1);
+    display: flex; align-items: center; gap: 10px; max-width: calc(100vw - 32px);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast-icon {
+    flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--accent);
+    color: var(--accent-ink); display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+
+  .offers-list { display: flex; flex-direction: column; gap: 10px; }
+  .offer-row { border: 1px solid var(--border); border-radius: 4px; padding: 12px; }
+  .offer-row-top { display: flex; justify-content: space-between; gap: 10px; }
+  .offer-title { font-size: 14.5px; font-weight: 600; }
+  .offer-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; font-family: "IBM Plex Mono"; }
+  .empty { color: var(--text-muted); font-size: 14px; padding: 20px 0; }
+
+  footer.site { border-top: 1px solid var(--border); padding: 28px 0 40px; }
+  footer.site .wrap { display: flex; flex-direction: column; gap: 6px; }
+  footer.site .f-name { font-size: 15px; font-weight: 600; }
+  footer.site p { color: var(--text-muted); font-size: 13px; margin: 0; max-width: 50ch; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<!-- ============ ICONS ============ -->
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="ic-desktop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="3" y="4" width="18" height="12" rx="1"/><path d="M8 20h8M12 16v4"/>
+  </symbol>
+  <symbol id="ic-laptop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="4" y="5" width="16" height="10" rx="1"/><path d="M2 19h20l-1.5-3h-17L2 19z"/>
+  </symbol>
+  <symbol id="ic-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="4" y="3.5" width="16" height="6" rx="1"/><rect x="4" y="14.5" width="16" height="6" rx="1"/>
+    <circle cx="7.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"/><circle cx="7.5" cy="17.5" r="0.6" fill="currentColor" stroke="none"/>
+  </symbol>
+  <symbol id="ic-memory" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M4 6h16v10.5a1.5 1.5 0 0 1-1.5 1.5H12l-1.5 2h-3L6 18H5.5A1.5 1.5 0 0 1 4 16.5V6z"/>
+    <path d="M8 6V3.5M12 6V3.5M16 6V3.5"/>
+  </symbol>
+  <symbol id="ic-power" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M13 3 5 13h6l-1 8 8-11h-6l1-7z" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="ic-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+    <path d="M3 3h8l10 10-8 8L3 11V3z" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.4" fill="currentColor" stroke="none"/>
+  </symbol>
+</svg>
+
+<header class="site">
+  <div class="wrap">
+    <div class="header-row">
+      <a class="brand" href="#top">
+        <span class="brand-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4v16l14-8L6 4z"/></svg></span>
+        <span>
+          <span class="brand-name" style="display:block;"><span class="b-tech">tech</span><span class="b-arrow">&#9654;</span><span class="b-renew">renew</span></span>
+          <span class="brand-sub">Great prices, fast shipping</span>
+        </span>
+      </a>
+      <div class="header-actions">
+        <button class="btn btn-ghost" id="myOffersBtn" style="display:none;">My offers</button>
+        <button class="btn" id="acctBtn">Sign in</button>
+      </div>
+    </div>
+    <nav class="cat-bar" id="catBar"></nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>Send your price on new and used tech hardware.</h1>
+        <p class="lede">New and used computers, parts and accessories. Pick a lot, name your offer, and we'll get back to you — no bidding wars, no reserve games.</p>
+        <div class="hero-cta">
+          <button class="btn btn-accent" onclick="document.getElementById('listings').scrollIntoView({behavior:'smooth'})">Browse open lots</button>
+          <button class="btn" id="heroCreateBtn" onclick="openAuth('signup')">Create account</button>
+        </div>
+      </div>
+      <div class="stat-plate">
+        <div class="stat-row"><span class="stat-label">Lots open for offers</span><span class="stat-value" id="statOpen">—</span></div>
+        <div class="stat-row"><span class="stat-label">Categories</span><span class="stat-value">5</span></div>
+        <div class="stat-row"><span class="stat-label">Condition</span><span class="stat-value">New &amp; used</span></div>
+        <div class="stat-row"><span class="stat-label">Typical response time</span><span class="stat-value">1–2 business days</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="listings wrap" id="listings">
+    <div class="section-head">
+      <h2 id="catTitle">All lots</h2>
+      <span class="count" id="catCount"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span class="f-name"><span class="b-tech">tech</span><span class="b-arrow">&#9654;</span><span class="b-renew">renew</span></span>
+    <p>New and used desktops, laptops, servers, memory and power hardware. This page is a working prototype: accounts and offers below are stored only in this browser, for demonstration.</p>
+  </div>
+</footer>
+
+<!-- ============ AUTH MODAL ============ -->
+<div class="overlay" id="authOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="authTitle">Sign in</h3>
+      <button class="close-x" onclick="closeModal('authOverlay')">&times;</button>
+    </div>
+    <div class="tabs">
+      <button class="tab active" id="tabSignin" onclick="switchAuthTab('signin')">Sign in</button>
+      <button class="tab" id="tabSignup" onclick="switchAuthTab('signup')">Create account</button>
+    </div>
+    <div id="signinForm">
+      <div class="field"><label for="siEmail">Email</label><input id="siEmail" type="email" autocomplete="email" placeholder="you@company.com"></div>
+      <div class="field"><label for="siPass">Password</label><input id="siPass" type="password" autocomplete="current-password"></div>
+      <div class="error-msg" id="siError"></div>
+      <button class="btn btn-accent btn-block" onclick="handleSignin()">Sign in</button>
+    </div>
+    <div id="signupForm" style="display:none;">
+      <div class="field"><label for="suName">Full name</label><input id="suName" type="text" autocomplete="name"></div>
+      <div class="field"><label for="suEmail">Email</label><input id="suEmail" type="email" autocomplete="email"></div>
+      <div class="field"><label for="suPass">Password</label><input id="suPass" type="password" autocomplete="new-password"></div>
+      <div class="field"><label for="suAddress">Street address</label><input id="suAddress" type="text" autocomplete="street-address" placeholder="123 Main St"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="field"><label for="suCity">City</label><input id="suCity" type="text" autocomplete="address-level2"></div>
+        <div class="field" id="suStateWrap"><label for="suState">State</label><div class="cselect" id="suStateField"></div></div>
+        <div class="field" id="suRegionWrap" style="display:none;"><label for="suRegion">Prefecture / region</label><input id="suRegion" type="text" autocomplete="address-level1"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="field"><label for="suZip">ZIP / postal code</label><input id="suZip" type="text" autocomplete="postal-code"></div>
+        <div class="field"><label for="suCountry">Country</label><div class="cselect" id="suCountryField"></div></div>
+      </div>
+      <div class="field-hint" style="margin:-6px 0 14px;">Used for shipping if an offer is accepted. Optional, but speeds things up.</div>
+      <label class="checkbox-row"><input type="checkbox" id="suNotify" checked> Email me when a new lot is posted</label>
+      <div class="error-msg" id="suError"></div>
+      <button class="btn btn-accent btn-block" onclick="handleSignup()">Create account</button>
+    </div>
+    <p class="fine">Prototype only — no real payment or verification. Account details are saved in this browser's local storage and are not sent anywhere.</p>
+  </div>
+</div>
+
+<!-- ============ LOT DETAILS MODAL ============ -->
+<div class="overlay" id="detailsOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="detTitle" style="font-size:22px;"></h3>
+      <button class="close-x" onclick="closeModal('detailsOverlay')">&times;</button>
+    </div>
+    <div id="detMedia" style="margin-bottom:12px;"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <span class="card-id mono" id="detId"></span>
+      <span class="badge" id="detGrade"></span>
+    </div>
+    <div class="card-spec" id="detSpec" style="font-size:13.5px;margin-bottom:14px;"></div>
+    <div class="price-row" style="margin-bottom:6px;">
+      <div><div class="price" id="detPrice" style="font-size:24px;"></div><div class="price-label">asking price</div></div>
+    </div>
+    <div class="closes" id="detCloses" style="margin-bottom:16px;"></div>
+    <button class="btn btn-accent btn-block" id="detOfferBtn">Make an offer</button>
+  </div>
+</div>
+
+<!-- ============ OFFER MODAL ============ -->
+<div class="overlay" id="offerOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Make an offer</h3>
+      <button class="close-x" onclick="closeModal('offerOverlay')">&times;</button>
+    </div>
+    <p class="offer-item-title" id="offerItemTitle" style="font-size:14px;color:var(--text-muted);margin:-6px 0 16px;"></p>
+    <div class="field">
+      <label for="offerAmount">Your offer (USD)</label>
+      <input id="offerAmount" type="number" min="1" step="1" inputmode="decimal" placeholder="e.g. 180">
+      <div class="field-hint" id="offerAsking"></div>
+    </div>
+    <div class="field">
+      <label for="offerNote">Note to seller (optional)</label>
+      <textarea id="offerNote" placeholder="Quantity needed, shipping questions, timeline..."></textarea>
+    </div>
+    <div class="error-msg" id="offerError"></div>
+    <button class="btn btn-accent btn-block" onclick="submitOffer()">Submit offer</button>
+  </div>
+</div>
+
+<!-- ============ MY OFFERS MODAL ============ -->
+<div class="overlay" id="myOffersOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>My account</h3>
+      <button class="close-x" onclick="closeModal('myOffersOverlay')">&times;</button>
+    </div>
+    <div style="margin-bottom:18px;">
+      <label style="display:block;font-size:12.5px;color:var(--text-muted);margin-bottom:8px;">Shipping address</label>
+      <div class="field"><label for="acctAddress">Street address</label><input id="acctAddress" type="text" placeholder="123 Main St"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="field"><label for="acctCity">City</label><input id="acctCity" type="text" placeholder="City"></div>
+        <div class="field" id="acctStateWrap"><label for="acctState">State</label><div class="cselect" id="acctStateField"></div></div>
+        <div class="field" id="acctRegionWrap" style="display:none;"><label for="acctRegion">Prefecture / region</label><input id="acctRegion" type="text"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="field"><label for="acctZip">ZIP / postal code</label><input id="acctZip" type="text" placeholder="ZIP / postal code"></div>
+        <div class="field"><label for="acctCountry">Country</label><div class="cselect" id="acctCountryField"></div></div>
+      </div>
+      <label class="checkbox-row"><input type="checkbox" id="acctNotify"> Email me when a new lot is posted</label>
+      <button class="btn" onclick="saveAddress()">Save preferences</button>
+    </div>
+    <h3 style="font-size:18px;margin-bottom:10px;">My offers</h3>
+    <div class="offers-list" id="myOffersList"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="toast-icon" id="toastIcon">✓</span><span id="toastMsg"></span></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Data ---------- */
+  var CATEGORIES = [
+    { id: "all",     label: "All lots" },
+    { id: "desktop", label: "Desktop" },
+    { id: "laptop",  label: "Laptop" },
+    { id: "server",  label: "Server" },
+    { id: "memory",  label: "Memory" },
+    { id: "power",   label: "Power" }
+  ];
+
+  var DEFAULT_ITEMS = [
+    { id:"TR-DSK-0142", cat:"desktop", icon:"ic-desktop", title:"HP EliteDesk 705 G5 SFF",
+      spec:"AMD Athlon 300GE · 512GB SSD · 32GB RAM · Win 11 Pro", grade:"A", asking:130, hours:30 },
+    { id:"TR-DSK-0138", cat:"desktop", icon:"ic-desktop", title:"Dell OptiPlex 7080 Micro",
+      spec:"Core i5-10500T · 256GB SSD · 16GB RAM · No OS", grade:"B", asking:145, hours:18 },
+    { id:"TR-DSK-0151", cat:"desktop", icon:"ic-desktop", title:"HP ProDesk 600 G5 SFF",
+      spec:"Core i5-9500 · 512GB SSD · 16GB RAM · No OS", grade:"B", asking:120, hours:44 },
+
+    { id:"TR-LAP-0873", cat:"laptop", icon:"ic-laptop", title:"Dell Latitude 5320",
+      spec:"Core i5-1145G7 · 512GB SSD · 16GB RAM · 13.3\" FHD · missing keycap", grade:"B", asking:155, hours:9 },
+    { id:"TR-LAP-0869", cat:"laptop", icon:"ic-laptop", title:"Dell Precision 5520",
+      spec:"Core i7-7820HQ · 256GB SSD · 16GB RAM · no OS / no charger", grade:"C", asking:200, hours:26 },
+    { id:"TR-LAP-0855", cat:"laptop", icon:"ic-laptop", title:"Lenovo ThinkPad E14",
+      spec:"Core i7-10510U · 256GB SSD · 8GB RAM · no OS", grade:"B", asking:175, hours:52 },
+
+    { id:"TR-SRV-0231", cat:"server", icon:"ic-server", title:"Dell PowerEdge R720 2U",
+      spec:"2x Xeon E5-2670 · 128GB RAM · 8x 600GB SAS · rail kit incl.", grade:"B", asking:520, hours:37 },
+    { id:"TR-SRV-0228", cat:"server", icon:"ic-server", title:"HP ProLiant DL380 G9 2U",
+      spec:"2x Xeon E5-2680v4 · 256GB RAM · 8x SFF bays", grade:"A", asking:690, hours:14 },
+    { id:"TR-SRV-0219", cat:"server", icon:"ic-server", title:"Dell PowerEdge R730xd",
+      spec:"2x Xeon E5-2690v4 · 192GB RAM · 12x 4TB storage bays", grade:"B", asking:810, hours:60 },
+
+    { id:"TR-MEM-1042", cat:"memory", icon:"ic-memory", title:"Samsung 32GB PC4-2400T RDIMM",
+      spec:"Server memory · 2Rx4 · lot of 4 (128GB total)", grade:"A", asking:225, hours:22 },
+    { id:"TR-MEM-1039", cat:"memory", icon:"ic-memory", title:"SK Hynix 32GB PC4-2400T RDIMM",
+      spec:"Server memory · single module", grade:"A", asking:60, hours:11 },
+    { id:"TR-MEM-1024", cat:"memory", icon:"ic-memory", title:"Micron 16GB PC3L-10600R RDIMM",
+      spec:"Server memory · lot of 10", grade:"B", asking:280, hours:41 },
+
+    { id:"TR-PWR-0311", cat:"power", icon:"ic-power", title:"HP ProLiant 800W Hot-Swap PSU",
+      spec:"Hot-swap server power supply · tested under load", grade:"A", asking:45, hours:20 },
+    { id:"TR-PWR-0307", cat:"power", icon:"ic-power", title:"Dell PowerEdge 1100W Redundant PSU",
+      spec:"Redundant power supply module", grade:"B", asking:38, hours:33 },
+    { id:"TR-PWR-0298", cat:"power", icon:"ic-power", title:"APC Smart-UPS 1500VA Rack Mount",
+      spec:"2U rack UPS · new batteries installed", grade:"A", asking:210, hours:48 }
+  ];
+
+  var GRADE_LABEL = { A:"Grade A · Like new", B:"Grade B · Light wear", C:"Grade C · Functional" };
+  var GRADE_CLASS = { A:"badge-good", B:"badge-warn", C:"badge-bad" };
+
+  /* ---------- Storage helpers ---------- */
+  function safeGet(key, fallback){
+    try {
+      var v = window.localStorage.getItem(key);
+      return v ? JSON.parse(v) : fallback;
+    } catch(e){ return fallback; }
+  }
+  function safeSet(key, val){
+    try { window.localStorage.setItem(key, JSON.stringify(val)); } catch(e){ /* storage unavailable */ }
+  }
+
+  var ITEMS = safeGet("tr_listings", null);
+  if (!ITEMS || !ITEMS.length) {
+    ITEMS = DEFAULT_ITEMS;
+    safeSet("tr_listings", ITEMS);
+  }
+
+  var deadlines = safeGet("tr_deadlines", {});
+  var deadlinesChanged = false;
+  ITEMS.forEach(function(it){
+    if (!deadlines[it.id]) {
+      deadlines[it.id] = Date.now() + (it.hours || 24) * 3600 * 1000;
+      deadlinesChanged = true;
+    }
+  });
+  if (deadlinesChanged) safeSet("tr_deadlines", deadlines);
+
+  window.addEventListener("storage", function(e){
+    if (e.key === "tr_listings") {
+      ITEMS = safeGet("tr_listings", DEFAULT_ITEMS);
+      renderGrid();
+    }
+  });
+
+  var accounts = safeGet("tr_accounts", {});
+  var session = safeGet("tr_session", null);
+  var offers = safeGet("tr_offers", []);
+
+  /* ---------- Address dropdowns ---------- */
+  var US_STATES = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware",
+    "District of Columbia","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky",
+    "Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana",
+    "Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota",
+    "Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas",
+    "Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];
+
+  var COUNTRIES = ["United States","Canada","United Kingdom","Australia","New Zealand","Ireland","Germany",
+    "France","Spain","Italy","Netherlands","Belgium","Switzerland","Austria","Portugal","Sweden","Norway",
+    "Denmark","Finland","Poland","Czech Republic","Greece","Hungary","Romania","Mexico","Brazil","Argentina",
+    "Chile","Colombia","Peru","Japan","South Korea","China","India","Singapore","Philippines","Malaysia",
+    "Indonesia","Thailand","Vietnam","United Arab Emirates","Saudi Arabia","Israel","South Africa","Nigeria",
+    "Kenya","Egypt","Turkey"];
+
+  function fillSelect(id, options, includeBlank, onChange){
+    var container = document.getElementById(id + "Field");
+    if (!container) return;
+    var current = "";
+    container.innerHTML =
+      '<button type="button" class="cselect-btn placeholder" id="' + id + 'Btn">Select…</button>' +
+      '<div class="cselect-menu" id="' + id + 'Menu" hidden></div>' +
+      '<input type="hidden" id="' + id + '" value="">';
+    var menu = document.getElementById(id + "Menu");
+    var btn = document.getElementById(id + "Btn");
+    var hidden = document.getElementById(id);
+    var all = includeBlank ? [""].concat(options) : options.slice();
+
+    function setValue(v){
+      hidden.value = v;
+      btn.textContent = v || "Select…";
+      btn.classList.toggle("placeholder", !v);
+      Array.prototype.forEach.call(menu.querySelectorAll(".cselect-option"), function(opt){
+        opt.classList.toggle("selected", opt.dataset.value === v);
+      });
+      if (onChange) onChange(v);
+    }
+
+    menu.innerHTML = all.map(function(o){
+      return '<div class="cselect-option" data-value="' + o.replace(/"/g, "&quot;") + '">' + (o || "Select…") + '</div>';
+    }).join("");
+
+    Array.prototype.forEach.call(menu.querySelectorAll(".cselect-option"), function(opt){
+      opt.onclick = function(){
+        setValue(opt.dataset.value);
+        menu.hidden = true;
+      };
+    });
+
+    btn.onclick = function(e){
+      e.stopPropagation();
+      Array.prototype.forEach.call(document.querySelectorAll(".cselect-menu"), function(m){
+        if (m !== menu) m.hidden = true;
+      });
+      menu.hidden = !menu.hidden;
+    };
+
+    var typeahead = { key: "", idx: -1 };
+    btn.onkeydown = function(e){
+      if (e.key.length !== 1 || !/[a-z0-9]/i.test(e.key)) return;
+      e.preventDefault();
+      var letter = e.key.toLowerCase();
+      var matches = [];
+      all.forEach(function(o, i){ if (o && o.toLowerCase().indexOf(letter) === 0) matches.push(i); });
+      if (!matches.length) return;
+      var startPos = 0;
+      if (typeahead.key === letter) {
+        var pos = matches.indexOf(typeahead.idx);
+        startPos = (pos + 1) % matches.length;
+      }
+      var chosenIdx = matches[startPos];
+      typeahead.key = letter;
+      typeahead.idx = chosenIdx;
+      setValue(all[chosenIdx]);
+    };
+
+    // expose a setter so other code can programmatically change the value
+    hidden.setValue = setValue;
+    setValue(current);
+  }
+
+  document.addEventListener("click", function(){
+    Array.prototype.forEach.call(document.querySelectorAll(".cselect-menu"), function(m){ m.hidden = true; });
+  });
+
+  function toggleRegion(prefix, country){
+    var isUS = country === "United States";
+    document.getElementById(prefix + "StateWrap").style.display = isUS ? "" : "none";
+    document.getElementById(prefix + "RegionWrap").style.display = isUS ? "none" : "";
+  }
+
+  fillSelect("suState", US_STATES, true);
+  fillSelect("suCountry", COUNTRIES, false, function(v){ toggleRegion("su", v); });
+  fillSelect("acctState", US_STATES, true);
+  fillSelect("acctCountry", COUNTRIES, false, function(v){ toggleRegion("acct", v); });
+  document.getElementById("suCountry").setValue("United States");
+
+  /* ---------- Render: category bar ---------- */
+  var activeCat = "all";
+  var catBar = document.getElementById("catBar");
+  CATEGORIES.forEach(function(c){
+    var b = document.createElement("button");
+    b.className = "cat-chip" + (c.id === "all" ? " active" : "");
+    b.textContent = c.label;
+    b.dataset.cat = c.id;
+    b.onclick = function(){ setCategory(c.id); };
+    catBar.appendChild(b);
+  });
+
+  function setCategory(id){
+    activeCat = id;
+    Array.prototype.forEach.call(catBar.children, function(el){
+      el.classList.toggle("active", el.dataset.cat === id);
+    });
+    var label = CATEGORIES.filter(function(c){ return c.id === id; })[0].label;
+    document.getElementById("catTitle").textContent = id === "all" ? "All lots" : label;
+    renderGrid();
+  }
+
+  /* ---------- Render: grid ---------- */
+  var grid = document.getElementById("grid");
+  function fmtCountdown(ms){
+    if (ms <= 0) return "Closed";
+    var h = Math.floor(ms / 3600000);
+    var m = Math.floor((ms % 3600000) / 60000);
+    if (h >= 24) {
+      var d = Math.floor(h / 24), rh = h % 24;
+      return "Closes in " + d + "d " + rh + "h";
+    }
+    return "Closes in " + h + "h " + m + "m";
+  }
+
+  var photoIdx = {};
+
+  function renderGrid(){
+    var list = ITEMS.filter(function(it){ return activeCat === "all" || it.cat === activeCat; });
+    document.getElementById("catCount").textContent = list.length + (list.length === 1 ? " lot" : " lots");
+    grid.innerHTML = "";
+    list.forEach(function(it){
+      var card = document.createElement("div");
+      card.className = "card";
+      var remain = deadlines[it.id] - Date.now();
+      var photos = it.photos && it.photos.length ? it.photos : (it.photo ? [it.photo] : []);
+      var idx = photoIdx[it.id] || 0;
+      var mediaHtml = photos.length
+        ? '<div class="card-media"><img class="card-photo" data-photo-id="' + it.id + '" src="' + photos[idx] + '" alt="">' +
+          (photos.length > 1 ? '<span class="photo-count">' + (idx + 1) + '/' + photos.length + '</span>' : '') + '</div>'
+        : '<svg class="card-icon"><use href="#' + (it.icon || "ic-desktop") + '"/></svg>';
+      card.innerHTML =
+        '<div class="card-top">' +
+          mediaHtml +
+          '<span class="badge ' + GRADE_CLASS[it.grade] + '">' + GRADE_LABEL[it.grade] + '</span>' +
+        '</div>' +
+        '<div class="card-id mono">' + it.id + '</div>' +
+        '<div class="card-title">' + it.title + '</div>' +
+        '<div class="card-spec">' + it.spec + '</div>' +
+        '<div class="card-bottom">' +
+          '<div class="price-row"><div><div class="price">$' + it.asking + '</div><div class="price-label">asking price</div></div></div>' +
+          '<div class="closes" data-deadline-id="' + it.id + '">' + fmtCountdown(remain) + '</div>' +
+          '<button class="btn btn-accent btn-block" data-offer-id="' + it.id + '">Make an offer</button>' +
+        '</div>';
+      grid.appendChild(card);
+      card.onclick = function(e){
+        if (e.target.closest("[data-photo-id]") || e.target.closest("[data-offer-id]")) return;
+        openLotDetails(it.id);
+      };
+    });
+    Array.prototype.forEach.call(grid.querySelectorAll("[data-photo-id]"), function(img){
+      img.onclick = function(){
+        var id = img.getAttribute("data-photo-id");
+        var it = ITEMS.filter(function(i){ return i.id === id; })[0];
+        var photos = it.photos && it.photos.length ? it.photos : (it.photo ? [it.photo] : []);
+        if (photos.length < 2) return;
+        photoIdx[id] = ((photoIdx[id] || 0) + 1) % photos.length;
+        renderGrid();
+      };
+    });
+    Array.prototype.forEach.call(grid.querySelectorAll("[data-offer-id]"), function(btn){
+      btn.onclick = function(){ openOfferModal(btn.getAttribute("data-offer-id")); };
+    });
+  }
+  renderGrid();
+
+  setInterval(function(){
+    Array.prototype.forEach.call(document.querySelectorAll("[data-deadline-id]"), function(el){
+      var id = el.getAttribute("data-deadline-id");
+      el.textContent = fmtCountdown(deadlines[id] - Date.now());
+    });
+  }, 60000);
+
+  document.getElementById("statOpen").textContent = ITEMS.length;
+
+  /* ---------- Modal plumbing ---------- */
+  function openModal(id){ document.getElementById(id).classList.add("open"); }
+  window.closeModal = function(id){ document.getElementById(id).classList.remove("open"); };
+  Array.prototype.forEach.call(document.querySelectorAll(".overlay"), function(ov){
+    ov.addEventListener("click", function(e){ if (e.target === ov) ov.classList.remove("open"); });
+  });
+
+  function showToast(msg, icon){
+    var t = document.getElementById("toast");
+    document.getElementById("toastMsg").textContent = msg;
+    document.getElementById("toastIcon").textContent = icon || "✓";
+    t.classList.add("show");
+    clearTimeout(t._hideTimer);
+    t._hideTimer = setTimeout(function(){ t.classList.remove("show"); }, 2900);
+  }
+
+  /* ---------- Auth ---------- */
+  window.openAuth = function(tab){
+    switchAuthTab(tab || "signin");
+    openModal("authOverlay");
+  };
+  window.switchAuthTab = function(tab){
+    document.getElementById("tabSignin").classList.toggle("active", tab === "signin");
+    document.getElementById("tabSignup").classList.toggle("active", tab === "signup");
+    document.getElementById("signinForm").style.display = tab === "signin" ? "block" : "none";
+    document.getElementById("signupForm").style.display = tab === "signup" ? "block" : "none";
+    document.getElementById("authTitle").textContent = tab === "signin" ? "Sign in" : "Create account";
+  };
+
+  function setErr(id, msg){
+    var el = document.getElementById(id);
+    el.textContent = msg || "";
+    el.style.display = msg ? "block" : "none";
+  }
+
+  window.handleSignin = function(){
+    var email = document.getElementById("siEmail").value.trim().toLowerCase();
+    var pass = document.getElementById("siPass").value;
+    setErr("siError", "");
+    if (!email || !pass) { setErr("siError", "Enter your email and password."); return; }
+    var acct = accounts[email];
+    if (!acct || acct.pass !== pass) { setErr("siError", "No matching account. Check your details or create an account."); return; }
+    session = { email: email, name: acct.name };
+    safeSet("tr_session", session);
+    closeModal("authOverlay");
+    updateAccountUI();
+    showToast("Signed in as " + acct.name);
+  };
+
+  window.handleSignup = function(){
+    var name = document.getElementById("suName").value.trim();
+    var email = document.getElementById("suEmail").value.trim().toLowerCase();
+    var pass = document.getElementById("suPass").value;
+    var address = document.getElementById("suAddress").value.trim();
+    var city = document.getElementById("suCity").value.trim();
+    var country = document.getElementById("suCountry").value.trim();
+    var state = (country === "United States")
+      ? document.getElementById("suState").value.trim()
+      : document.getElementById("suRegion").value.trim();
+    var zip = document.getElementById("suZip").value.trim();
+    var notify = document.getElementById("suNotify").checked;
+    setErr("suError", "");
+    if (!name || !email || !pass) { setErr("suError", "Fill in all fields."); return; }
+    if (accounts[email]) { setErr("suError", "An account with this email already exists."); return; }
+    if (pass.length < 4) { setErr("suError", "Use at least 4 characters."); return; }
+    accounts[email] = { name: name, pass: pass, address: address, city: city, state: state, zip: zip, country: country, notifyNewLots: notify };
+    safeSet("tr_accounts", accounts);
+    session = { email: email, name: name };
+    safeSet("tr_session", session);
+    closeModal("authOverlay");
+    updateAccountUI();
+    showToast("Welcome, " + name + " — account created");
+  };
+
+  window.signOut = function(){
+    session = null;
+    safeSet("tr_session", null);
+    updateAccountUI();
+    showToast("Signed out");
+  };
+
+  function updateAccountUI(){
+    var acctBtn = document.getElementById("acctBtn");
+    var myOffersBtn = document.getElementById("myOffersBtn");
+    var heroCreateBtn = document.getElementById("heroCreateBtn");
+    if (session) {
+      acctBtn.textContent = session.name.split(" ")[0] + " · Sign out";
+      acctBtn.onclick = window.signOut;
+      myOffersBtn.style.display = "inline-block";
+      heroCreateBtn.style.display = "none";
+    } else {
+      acctBtn.textContent = "Sign in";
+      acctBtn.onclick = function(){ openAuth("signin"); };
+      myOffersBtn.style.display = "none";
+      heroCreateBtn.style.display = "inline-block";
+    }
+  }
+  document.getElementById("myOffersBtn").onclick = function(){ renderMyOffers(); fillAddressFields(); openModal("myOffersOverlay"); };
+  updateAccountUI();
+
+  function fillAddressFields(){
+    var acct = session ? accounts[session.email] : null;
+    document.getElementById("acctAddress").value = (acct && acct.address) || "";
+    document.getElementById("acctCity").value = (acct && acct.city) || "";
+    document.getElementById("acctState").setValue((acct && acct.state) || "");
+    document.getElementById("acctRegion").value = (acct && acct.state) || "";
+    document.getElementById("acctZip").value = (acct && acct.zip) || "";
+    document.getElementById("acctCountry").setValue((acct && acct.country) || "United States");
+    document.getElementById("acctNotify").checked = !!(acct && acct.notifyNewLots);
+  }
+
+  window.saveAddress = function(){
+    if (!session) return;
+    var acct = accounts[session.email];
+    if (!acct) return;
+    acct.address = document.getElementById("acctAddress").value.trim();
+    acct.city = document.getElementById("acctCity").value.trim();
+    acct.country = document.getElementById("acctCountry").value.trim();
+    acct.state = (acct.country === "United States")
+      ? document.getElementById("acctState").value.trim()
+      : document.getElementById("acctRegion").value.trim();
+    acct.zip = document.getElementById("acctZip").value.trim();
+    acct.notifyNewLots = document.getElementById("acctNotify").checked;
+    safeSet("tr_accounts", accounts);
+    showToast("Preferences saved");
+  };
+
+  /* ---------- Lot details ---------- */
+  var detPhotoIdx = 0;
+  window.openLotDetails = function(itemId){
+    var item = ITEMS.filter(function(i){ return i.id === itemId; })[0];
+    if (!item) return;
+    detPhotoIdx = 0;
+    var photos = item.photos && item.photos.length ? item.photos : (item.photo ? [item.photo] : []);
+
+    function renderDetMedia(){
+      var media = document.getElementById("detMedia");
+      if (!photos.length) {
+        media.innerHTML = '<div class="det-photo-wrap"><svg class="card-icon"><use href="#' + (item.icon || "ic-desktop") + '"/></svg></div>';
+        return;
+      }
+      media.innerHTML = '<div class="det-photo-wrap"><img src="' + photos[detPhotoIdx] + '" alt="">' +
+        (photos.length > 1 ? '<span class="det-photo-count">' + (detPhotoIdx + 1) + '/' + photos.length + '</span>' : '') + '</div>';
+      if (photos.length > 1) {
+        media.querySelector("img").onclick = function(){
+          detPhotoIdx = (detPhotoIdx + 1) % photos.length;
+          renderDetMedia();
+        };
+      }
+    }
+    renderDetMedia();
+
+    document.getElementById("detTitle").textContent = item.title;
+    document.getElementById("detId").textContent = item.id;
+    document.getElementById("detGrade").textContent = GRADE_LABEL[item.grade];
+    document.getElementById("detGrade").className = "badge " + GRADE_CLASS[item.grade];
+    document.getElementById("detSpec").textContent = item.spec;
+    document.getElementById("detPrice").textContent = "$" + item.asking;
+    document.getElementById("detCloses").textContent = fmtCountdown(deadlines[item.id] - Date.now());
+    document.getElementById("detOfferBtn").onclick = function(){
+      closeModal("detailsOverlay");
+      openOfferModal(item.id);
+    };
+    openModal("detailsOverlay");
+  };
+
+  /* ---------- Offers ---------- */
+  var pendingOfferItemId = null;
+  window.openOfferModal = function(itemId){
+    if (!session) {
+      openAuth("signin");
+      showToast("Sign in to make an offer");
+      return;
+    }
+    var item = ITEMS.filter(function(i){ return i.id === itemId; })[0];
+    if (!item) return;
+    pendingOfferItemId = itemId;
+    document.getElementById("offerItemTitle").textContent = item.title + " (" + item.id + ")";
+    document.getElementById("offerAsking").textContent = "Asking price: $" + item.asking;
+    document.getElementById("offerAmount").value = "";
+    document.getElementById("offerNote").value = "";
+    setErr("offerError", "");
+    openModal("offerOverlay");
+  };
+
+  window.submitOffer = function(){
+    var amount = parseFloat(document.getElementById("offerAmount").value);
+    setErr("offerError", "");
+    if (!amount || amount <= 0) { setErr("offerError", "Enter a valid offer amount."); return; }
+    var item = ITEMS.filter(function(i){ return i.id === pendingOfferItemId; })[0];
+    var note = document.getElementById("offerNote").value.trim();
+    offers.unshift({
+      itemId: item.id,
+      itemTitle: item.title,
+      amount: amount,
+      note: note,
+      email: session.email,
+      status: "Pending review",
+      submittedAt: Date.now()
+    });
+    safeSet("tr_offers", offers);
+    closeModal("offerOverlay");
+    showToast("Offer sent — $" + amount + " on " + item.title + ". We'll be in touch soon.", "🚀");
+  };
+
+  function renderMyOffers(){
+    var list = document.getElementById("myOffersList");
+    var mine = session ? offers.filter(function(o){ return o.email === session.email; }) : [];
+    if (!mine.length) {
+      list.innerHTML = '<div class="empty">No offers yet. Browse the lots and send your first offer.</div>';
+      return;
+    }
+    list.innerHTML = mine.map(function(o){
+      var d = new Date(o.submittedAt);
+      return '<div class="offer-row">' +
+        '<div class="offer-row-top"><span class="offer-title">' + o.itemTitle + '</span>' +
+        '<span class="badge badge-warn">' + o.status + '</span></div>' +
+        '<div class="offer-meta">$' + o.amount + ' · ' + d.toLocaleDateString() + '</div>' +
+        (o.note ? '<div class="card-spec" style="margin-top:6px;">' + o.note + '</div>' : '') +
+        '</div>';
+    }).join("");
+  }
+
+})();
+</script>
+</body>
+</html>
